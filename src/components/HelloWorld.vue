@@ -1,9 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-      <p>{{this.$andrei}}</p>
-      <p>{{$apiUrl}}</p>
-      <p>{{$asd}}</p>
+      <p>THIS IS SMARTAAAA!!</p>
   </div>
 </template>
 
