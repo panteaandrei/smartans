@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-      <p>THIS IS SMARTAAAA!!</p>
+      <p><i class="fab fa-accessible-icon"></i> THIS IS SMARTAAAA!!</p>
   </div>
 </template>
 
