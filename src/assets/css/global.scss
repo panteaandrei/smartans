@@ -1,6 +1,11 @@
 @import "variables";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 #app {
-  background: $color_gray_light;
+  font-family: 'Poppins', sans-serif;
+
+  p {
+    margin:0;
+  }
 }
