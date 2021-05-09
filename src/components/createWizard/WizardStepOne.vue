@@ -1,40 +1,48 @@
 <template>
-    <div class="d-flex flex-column align-items-start justify-content-center w-100">
-        <p>step one</p>
-        <div class="navigation-container d-flex align-items-center justify-content-center">
-            <sm-button
-                :button-text="'inapoi'"
-                :icon-before="'fas fa-arrow-left'"
-                :type="'secondary'"
-                @handleClick="previousStep"
-            />
-            <sm-button
-                class="ml-1"
-                :button-text="'Continuă'"
-                :icon-after="'fas fa-arrow-right'"
-                @handleClick="nextStep"
+    <div class="d-flex align-items-start justify-content-center step-content col-md-9">
+
+        <div class="col-6" v-for="(field, index) in Object.keys(personal)"
+             :key="index">
+            <sm-text-input
+                           :label="personal[field].name"
+                           :name="field"
+                           :error="personal[field].error"
+                           v-model="personal[field].value"
+                           @input="checkError(field)"
             />
         </div>
+
+
     </div>
 
 </template>
 
 <script>
-import SmButton from "@/components/DesignComponents/SmButton";
+import SmTextInput from "@/components/DesignComponents/SmTextInput";
+import {mapFields} from 'vuex-map-fields';
+
 export default {
     name: "WizardStepOne",
-    components: {SmButton},
+    components: {SmTextInput},
+    data() {
+        return {}
+    },
     methods: {
-        nextStep() {
-            this.$emit('nextStep')
-        },
-        previousStep() {
-            this.$emit('previousStep')
+        checkError(field) {
+
+            if (this.personal[field].required && this.personal[field].value.length) {
+                this.personal[field].error = ''
+            }
         }
+    },
+    computed: {
+        ...mapFields([
+            'cv.personal'
+        ]),
     }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>
