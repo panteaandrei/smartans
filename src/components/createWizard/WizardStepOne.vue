@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex align-items-start justify-content-center step-content col-md-9">
 
-        <div class="col-6" v-for="(field, index) in Object.keys(personal)"
+        <div class="col-12 col-md-6" v-for="(field, index) in Object.keys(personal)"
              :key="index">
             <sm-text-input
                 :label="personal[field].name"

@@ -4,10 +4,10 @@
             <div class="tab" @click="switchTab('choose')" :class="{active: activeTab === 'choose'}">Alege experiența</div>
             <div class="tab" @click="switchTab('no-experience')" :class="{active: activeTab === 'no-experience'}">Nu am experiență</div>
         </div>
-        <div class="add-experience col-md-9 d-flex flex-column" v-if="activeTab === 'choose'">
+        <div class="add-experience col-12 col-md-9 d-flex flex-column" v-if="activeTab === 'choose'">
             <div class="experience-tab row mt-5" v-for="(experience, index) in workExperience" :key="index">
-                <div class="col-6" v-for="(field, index2) in Object.keys(experience)"
-                     :class="{'col-12':field === 'attributions'}"
+                <div class="col-12 col-md-6" v-for="(field, index2) in Object.keys(experience)"
+                     :class="{'col-md-12':field === 'attributions'}"
                      :key="index2">
                     <sm-text-input
                         :type="field === 'attributions' ? 'textarea' : field === 'period'  ? 'date' : 'input'"
@@ -24,8 +24,17 @@
             <sm-button type="tertiary" button-text="Adaugă experiență" :icon-before="'fa fa-plus'" class="mr-auto" @handleClick="addExperience"/>
 
         </div>
-        <div class="no-experience col-md-9" v-else>
+        <div class="no-experience col-md-9 d-flex flex-column align-items-start" v-else>
 
+            <p class="medium-text">
+                Nu am experiență, însă abia astept să îmi fac!
+            </p>
+            <p class="small-text">
+                Personalizeaza-ti profilul cu caracteristicile tale.
+            </p>
+            <sm-autofill-text :dropdowns="dropdowns">
+
+            </sm-autofill-text>
         </div>
     </div>
 </template>
@@ -35,13 +44,45 @@
 import {mapFields} from 'vuex-map-fields';
 import SmTextInput from "@/components/DesignComponents/SmTextInput";
 import SmButton from "@/components/DesignComponents/SmButton";
+import SmAutofillText from "@/components/DesignComponents/SmAutofillText";
 
 export default {
     name: "WizardStepTwo",
-    components: {SmButton, SmTextInput},
+    components: {SmAutofillText, SmButton, SmTextInput},
     data() {
         return {
-            activeTab: 'choose'
+            activeTab: 'choose',
+            dropdowns: [
+                {
+                    opened: false,
+                    selectedOption: '',
+                    options: [
+                        'ambitioasă','atentă','creativă'
+                    ]
+                },
+                {
+                    opened: false,
+                    selectedOption: '',
+                    options: [
+                        'ambitioasă','atentă','creativă'
+                    ]
+                },
+                {
+                    opened: false,
+                    selectedOption: '',
+                    options: [
+                        'ambitioasă','atentă','creativă'
+                    ]
+                },
+                {
+                    opened: false,
+                    selectedOption: '',
+                    options: [
+                        'ambitioasă','atentă','creativă'
+                    ]
+                },
+
+            ]
         }
     },
     methods: {
@@ -82,6 +123,11 @@ export default {
             border-bottom: solid 5px transparent;
             cursor: pointer;
 
+            @media (max-width: 767px) {
+                padding: 14px 4px;
+                flex-grow: 1;
+            }
+
             &.active {
                 color: #053AFA;
                 border-bottom: solid 5px #9BB0FD;
@@ -92,6 +138,27 @@ export default {
     .add-experience {
         .experience-tab {
             border-bottom: 1px solid #ECF1F4;
+        }
+    }
+
+    .no-experience {
+        padding-top :40px;
+
+        .medium-text {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            color: #373F41;
+        }
+
+        .small-text {
+            padding-top:32px;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            color: #636F99;
         }
     }
 </style>

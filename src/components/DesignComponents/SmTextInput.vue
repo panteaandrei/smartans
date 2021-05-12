@@ -161,6 +161,10 @@ export default {
             }
         }
 
+        textarea {
+            min-height:150px;
+        }
+
         label {
             font-style: normal;
             font-weight: 600;
