@@ -3,6 +3,39 @@ import Vuex from 'vuex'
 import { getField, updateField } from 'vuex-map-fields';
 Vue.use(Vuex)
 
+const workExperienceModel = {
+  occupation: {
+    value: '',
+    required: true,
+    error:'',
+    name: 'Ocupația'
+  },
+  employer: {
+    value: '',
+    required: true,
+    error:'',
+    name: 'Angajator'
+  },
+  period: {
+    value: '',
+    required: true,
+    error:'',
+    name: 'Perioada'
+  },
+  city: {
+    value: '',
+    required: true,
+    error:'',
+    name: 'Oraș'
+  },
+  attributions: {
+    value: '',
+    required: true,
+    error:'',
+    name: 'Descriere atribuții (optional)'
+  }
+}
+
 export default new Vuex.Store({
   state: {
     user:{
@@ -50,14 +83,60 @@ export default new Vuex.Store({
           name: 'Data nasterii (optional)'
         },
       },
-      workExperience: {
+      workExperience: [
+        {
+          occupation: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Ocupația'
+          },
+          employer: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Angajator'
+          },
+          period: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Perioada'
+          },
+          city: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Oraș'
+          },
+          attributions: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Descriere atribuții (optional)'
+          }
+        }
+      ],
+      education: {
 
       },
-      stepThree: {
+      languages: {
+
+      },
+      disabilities: {
+
+      },
+      intrests: {
+
+      },
+      skills: {
+
+      },
+      hobbies: {
 
       }
 
-    }
+    },
   },
   getters: {
     // Add the `getField` getter to the
@@ -72,8 +151,16 @@ export default new Vuex.Store({
       state.user.id = null;
     },
     updateField,
+    addWorkExperience(state) {
+
+      state.cv.workExperience.push(JSON.parse(JSON.stringify(workExperienceModel)))
+
+    }
   },
   actions: {
+    addWorkExperienceAction(context) {
+      context.commit('addWorkExperience');
+    }
   },
   modules: {
   }

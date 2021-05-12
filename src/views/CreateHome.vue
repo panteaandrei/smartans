@@ -132,23 +132,45 @@ name: "CreateHome",
             if (this.activeStep) {
                 let error = false;
                 let cvSection = this.cv[Object.keys(this.cv)[this.activeStep-1]];
-                let requiredFields = Object.keys(cvSection).filter(field => {
-                    return cvSection[field].required;
-                });
 
-                if (requiredFields.length) {
-                    requiredFields.forEach(field => {
-                        cvSection[field].error = '';
-                        if (!cvSection[field].value.length) {
-                            cvSection[field].error = 'This field is required';
-                            error = true;
+                if (Array.isArray(cvSection)) {
+                    cvSection.forEach(section => {
+                        let requiredFields = Object.keys(section).filter(field => {
+                            return section[field].required;
+                        });
+
+                        if (requiredFields.length) {
+                            requiredFields.forEach(field => {
+                                section[field].error = '';
+                                if (!section[field].value.length) {
+                                    section[field].error = 'This field is required';
+                                    error = true;
+                                }
+                            })
+
                         }
                     })
+                } else {
+                    let requiredFields = Object.keys(cvSection).filter(field => {
+                        return cvSection[field].required;
+                    });
 
-                    if (error) {
-                        return;
+                    if (requiredFields.length) {
+                        requiredFields.forEach(field => {
+                            cvSection[field].error = '';
+                            if (!cvSection[field].value.length) {
+                                cvSection[field].error = 'This field is required';
+                                error = true;
+                            }
+                        })
+
                     }
                 }
+
+                if (error) {
+                    return;
+                }
+
             }
 
             this.wizardSteps[this.activeStep].active = false;

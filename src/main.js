@@ -5,7 +5,6 @@ import store from './store'
 import '@fortawesome/fontawesome-free/js/all.min'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
-
 import './assets/css/global.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

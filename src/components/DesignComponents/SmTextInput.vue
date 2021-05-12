@@ -4,13 +4,32 @@
     >
         <label :for="'sm-text-input_' + name">{{label}}</label>
         <input
+            v-if="type === 'input'"
             type="text"
             class="text-input w-100"
             :name="name"
             :id="'sm-text-input_' + name"
             :placeholder="label"
             v-model="propModel"
-        >
+        />
+        <textarea
+            v-else-if="type === 'textarea'"
+            class="text-input w-100"
+            :name="name"
+            :id="'sm-text-input_' + name"
+            :placeholder="label"
+            v-model="propModel"
+        ></textarea>
+        <date-picker
+            v-model="propModel"
+            :name="name"
+            :range="true"
+            :clearable="false"
+            :range-separator="'    ~    '"
+            :placeholder="label"
+            v-else-if="type === 'date'"
+        ></date-picker>
+
         <svg v-if="error" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="info-icon position-absolute">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM12.75 6V14H11.25V6H12.75ZM13 17C13 17.5523 12.5523 18 12 18C11.4477 18 11 17.5523 11 17C11 16.4477 11.4477 16 12 16C12.5523 16 13 16.4477 13 17Z" fill="#D6072C"/>
         </svg>
@@ -27,8 +46,12 @@
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 export default {
     name: "SmTextInput",
+    components:{DatePicker},
     props: {
         label: {
             type: String,
@@ -39,9 +62,8 @@ export default {
             default: ''
         },
         value: {
-            type: String,
+            type: [ String, Array ],
             required: true,
-            default: ''
         },
         error: {
             type: String,
@@ -54,11 +76,23 @@ export default {
         success: {
             type: Boolean,
             default: false
+        },
+        type: {
+            type: String,
+            default: 'input'
         }
     },
     data() {
         return {
+            formatDate: {
+                stringify: (date) => {
+                    return date
+                }
+            }
         }
+    },
+    methods: {
+
     },
     computed: {
         propModel: {
@@ -75,7 +109,7 @@ export default {
         margin-bottom: 30px;
 
         &.has-error {
-            .text-input {
+            .text-input, & /deep/ .mx-input {
                 background: #fff;
                 box-shadow: 0 0 0 2px #FBE6EA;
                 border: 1px solid #D6072C;
@@ -83,7 +117,7 @@ export default {
         }
 
         &.success{
-            .text-input {
+            .text-input, & /deep/ .mx-input {
                 background: #fff;
                 box-shadow: 0 0 0 2px rgba(1, 177, 50, 0.16);
                 border: 1px solid #01B132;
@@ -91,18 +125,24 @@ export default {
         }
 
         &.disabled {
-            .text-input {
+            .text-input, & /deep/ .mx-input {
                 background: #FAFCFE;
                 pointer-events: none;
             }
         }
 
-        .text-input {
+        .text-input, & /deep/ .mx-input {
             background: #ECF1F4;
             border-radius: 8px;
             padding: 10px 13px 12px;
             box-shadow: 0 0 0 2px transparent;
             border: 1px solid transparent;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 140%;
+            color: #0E0E2C;
+            height:48px;
 
             &::placeholder {
                 font-style: normal;
@@ -145,5 +185,14 @@ export default {
             right: 18px;
             top: 40px;
         }
+
+        & /deep/ .mx-icon-calendar {
+            display: none;
+        }
+
+        & /deep/ .mx-datepicker-range {
+            width:100%;
+        }
+
     }
 </style>

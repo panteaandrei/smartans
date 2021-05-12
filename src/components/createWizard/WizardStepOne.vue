@@ -4,11 +4,11 @@
         <div class="col-6" v-for="(field, index) in Object.keys(personal)"
              :key="index">
             <sm-text-input
-                           :label="personal[field].name"
-                           :name="field"
-                           :error="personal[field].error"
-                           v-model="personal[field].value"
-                           @input="checkError(field)"
+                :label="personal[field].name"
+                :name="field"
+                :error="personal[field].error"
+                v-model="personal[field].value"
+                @input="checkError(field)"
             />
         </div>
 

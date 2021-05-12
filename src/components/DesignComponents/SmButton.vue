@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex button-wrapper align-items-center justify-content-between"
+    <div class="d-flex button-wrapper align-items-center justify-content-start"
          :class="{active: active, secondary:type === 'secondary', tertiary: type === 'tertiary'}"
          @click="handleClick"
          @mousedown="active = true"
@@ -73,6 +73,20 @@ export default {
             }
         }
 
+        &.tertiary {
+            background: #fff;
+            border: 1px solid transparent;
+            box-shadow: none;
+
+            p {
+                color:#053AFA;
+            }
+
+            i, svg {
+                color: #053AFA;
+            }
+        }
+
         p {
             font-style: normal;
             font-weight: bold;
@@ -100,6 +114,15 @@ export default {
             &.secondary {
                 background: rgba(5, 58, 250, 0.05)
             }
+            &.tertiary {
+                background: #ffffff;
+                p {
+                    color: rgba(5, 58, 250, 0.8);
+                }
+                i, svg {
+                    color: rgba(5, 58, 250, 0.8);
+                }
+            }
         }
 
         &.active {
@@ -112,12 +135,15 @@ export default {
                 border: 1px solid #D8E1FF;
                 padding: 12px 24px;
             }
+            &.tertiary {
+                color: #0033EB;
+            }
         }
 
         &.disabled {
             background: rgba(5, 58, 250, 0.4);
 
-            &.secondary {
+            &.secondary, &.tertiary {
                 background: #fff;
                 p {
                     color: rgba(5, 58, 250, 0.4);
