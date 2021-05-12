@@ -32,7 +32,7 @@
             <p class="small-text">
                 Personalizeaza-ti profilul cu caracteristicile tale.
             </p>
-            <sm-autofill-text :dropdowns="dropdowns">
+            <sm-autofill-text :dropdowns="dropdowns" >
 
             </sm-autofill-text>
         </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-
+//todo add model to sm-autofill
 import {mapFields} from 'vuex-map-fields';
 import SmTextInput from "@/components/DesignComponents/SmTextInput";
 import SmButton from "@/components/DesignComponents/SmButton";
@@ -87,7 +87,9 @@ export default {
     },
     methods: {
         switchTab(val) {
+
             this.activeTab = val;
+            this.$store.dispatch('switchWorkExperienceAction', {type:val})
         },
         checkError(index, field) {
 

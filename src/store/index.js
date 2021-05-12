@@ -154,12 +154,32 @@ export default new Vuex.Store({
     addWorkExperience(state) {
 
       state.cv.workExperience.push(JSON.parse(JSON.stringify(workExperienceModel)))
+    },
+    switchWorkExperience(state, data) {
 
-    }
+      console.log(data.type)
+      if (data.type === 'no-experience') {
+        state.cv.workExperience = [{
+          noExperience: {
+            value: '',
+            required: true,
+            error:'',
+            name: 'Nu am experienta'
+          }
+        }]
+      } else {
+        state.cv.workExperience = [workExperienceModel]
+      }
+
+    },
   },
   actions: {
     addWorkExperienceAction(context) {
       context.commit('addWorkExperience');
+    },
+    switchWorkExperienceAction(context, data) {
+      console.log(data)
+      context.commit('switchWorkExperience', {type: data.type});
     }
   },
   modules: {
