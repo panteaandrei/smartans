@@ -1,7 +1,9 @@
 <template>
-    <div class="sm-checkbox-container">
+    <div class="sm-checkbox-container d-flex align-items-center justify-content-center"
+        :class="{selected: selected}"
+    >
         <label class="pure-material-checkbox">
-            <input type="checkbox">
+            <input type="checkbox" v-model="propModel">
             <span>{{label}}</span>
         </label>
     </div>
@@ -19,12 +21,40 @@ export default {
         },
         icon: {
             type: String
+        },
+        selected: {
+            type: Boolean
         }
-    }
+    },
+    computed: {
+        propModel: {
+            get () { return this.value },
+            set (value) { this.$emit('input', value) },
+        },
+    },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.sm-checkbox-container {
+    background: #FFFFFF;
+    /* /Main Navy Blue */
+
+    border: 2px solid #053AFA;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin: 0 20px 20px 0;
+
+    &.selected {
+        background: rgba(5, 58, 250, 0.05);
+    }
+}
+
+</style>
+
+<style>
+
 .pure-material-checkbox {
     z-index: 0;
     position: relative;
@@ -33,6 +63,16 @@ export default {
     font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
     font-size: 16px;
     line-height: 1.5;
+    margin: 0;
+    font-style: normal;
+    font-weight: bold;
+    align-items: center;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    /* Slate - Secondary Text */
+
+    color: #424B6B;
 }
 
 /* Input */
@@ -71,9 +111,9 @@ export default {
     display: inline-block;
     box-sizing: border-box;
     margin: 3px 11px 3px 1px;
-    border: solid 2px; /* Safari */
+    border: solid 1px; /* Safari */
     border-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
-    border-radius: 2px;
+    border-radius: 4px;
     width: 18px;
     height: 18px;
     vertical-align: top;

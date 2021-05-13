@@ -11,7 +11,7 @@ import moment from "moment";
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 const workExperienceModel = {
-  occupation: {
+  position: {
     value: '',
     required: true,
     error:'',
@@ -46,7 +46,7 @@ const workExperienceModel = {
 export default new Vuex.Store({
   state: {
     user:{
-      id:null,
+      token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiODE5MTYxMjAtYTlhOC00NTA1LTkzZWEtNWQ1OTQ5YjI0ODM1IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNjIwOTMzMTQzfQ.ymFs--I5vsHqYusRfnt4MEFDLSI-wiwB9QpaaRmcPPc',
       name: null
     },
 
@@ -256,8 +256,8 @@ export default new Vuex.Store({
 
           // get start date / end date
           if (item === 'period') {
-            data['start_date'] =  moment().format(experience[item].value[0], 'YYYY-MM-DD')
-            data['end_date'] =  moment().format(experience[item].value[1], 'YYYY-MM-DD')
+            data['start_date'] =  moment(experience[item].value[0]).format( 'YYYY-MM-DD')
+            data['end_date'] =  moment(experience[item].value[1]).format( 'YYYY-MM-DD')
             console.log(data)
           } else {
             data[item] = experience[item].value
