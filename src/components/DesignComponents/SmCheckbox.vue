@@ -28,7 +28,7 @@ export default {
     },
     computed: {
         propModel: {
-            get () { return this.value },
+            get () { return this.selected },
             set (value) { this.$emit('input', value) },
         },
     },

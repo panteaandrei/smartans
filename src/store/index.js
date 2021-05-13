@@ -153,7 +153,6 @@ export default new Vuex.Store({
   mutations: {
     doLogin(state, token) {
 
-      console.log(token)
       state.user.token = token;
 
       router.push('/create')
@@ -239,12 +238,7 @@ export default new Vuex.Store({
         data
       }, {
         headers: { Authorization: `Bearer ` +  context.state.user.token}
-      }).then(response => {
-        console.log(response)
-      }).catch(err => {
-        console.log(err)
       })
-
     },
     saveWorkExperienceAction(context) {
 
@@ -258,7 +252,6 @@ export default new Vuex.Store({
           if (item === 'period') {
             data['start_date'] =  moment(experience[item].value[0]).format( 'YYYY-MM-DD')
             data['end_date'] =  moment(experience[item].value[1]).format( 'YYYY-MM-DD')
-            console.log(data)
           } else {
             data[item] = experience[item].value
           }
@@ -268,15 +261,20 @@ export default new Vuex.Store({
           ...data
         }, {
           headers: { Authorization: `Bearer ` +  context.state.user.token}
-        }).then(response => {
-          console.log(response)
-        }).catch(err => {
-          console.log(err)
         })
       })
+    },
+    saveEducationAction(context, data) {
 
 
-
+      console.log(data)
+      data.forEach(education => {
+        axios.post('https://dev-imable.herokuapp.com/user/education', {
+          ...education
+        }, {
+          headers: { Authorization: `Bearer ` +  context.state.user.token}
+        })
+      })
     }
   },
   modules: {
