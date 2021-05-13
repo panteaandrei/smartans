@@ -15,6 +15,7 @@
             <div class="" v-for="(step, index) in wizardSteps" :key="index">
                 <component
                     :is="step.component"
+                    :wizard-steps="wizardSteps"
                     v-if="wizardSteps[index].active"
                     key="index"
                     class="row"
@@ -22,23 +23,23 @@
             </div>
 
         </div>
-        <div class="wizard-footer">
-            <div class="navigation-container d-flex align-items-center justify-content-center">
-                <sm-button
-                    :button-text="'inapoi'"
-                    :icon-before="'fas fa-arrow-left'"
-                    :type="'secondary'"
-                    @handleClick="previousStep"
-                    v-if="activeStep"
-                />
-                <sm-button
-                    class="ml-1"
-                    :button-text="!activeStep ? 'Start' :'Continuă'"
-                    :icon-after="'fas fa-arrow-right'"
-                    @handleClick="nextStep"
-                />
-            </div>
-        </div>
+<!--        <div class="wizard-footer">-->
+<!--            <div class="navigation-container d-flex align-items-center justify-content-center">-->
+<!--                <sm-button-->
+<!--                    :button-text="'inapoi'"-->
+<!--                    :icon-before="'fas fa-arrow-left'"-->
+<!--                    :type="'secondary'"-->
+<!--                    @handleClick="previousStep"-->
+<!--                    v-if="activeStep"-->
+<!--                />-->
+<!--                <sm-button-->
+<!--                    class="ml-1"-->
+<!--                    :button-text="!activeStep ? 'Start' :'Continuă'"-->
+<!--                    :icon-after="'fas fa-arrow-right'"-->
+<!--                    @handleClick="nextStep"-->
+<!--                />-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 

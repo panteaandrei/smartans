@@ -1,8 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { getField, updateField } from 'vuex-map-fields';
-Vue.use(Vuex)
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import router from "@/router";
+import moment from "moment";
+
+
+Vue.use(VueAxios, axios)
+Vue.use(Vuex)
 const workExperienceModel = {
   occupation: {
     value: '',
@@ -28,7 +35,7 @@ const workExperienceModel = {
     error:'',
     name: 'Oraș'
   },
-  attributions: {
+  description: {
     value: '',
     required: true,
     error:'',
@@ -64,7 +71,7 @@ export default new Vuex.Store({
           error:'',
           name: 'Email'
         },
-        phone: {
+        phone_number: {
           value: '',
           required: true,
           error:'',
@@ -76,7 +83,7 @@ export default new Vuex.Store({
           error:'',
           name: 'Locatia actuala'
         },
-        birth_date: {
+        birthdate: {
           value: '',
           required: false,
           error:'',
@@ -85,7 +92,7 @@ export default new Vuex.Store({
       },
       workExperience: [
         {
-          occupation: {
+          position: {
             value: '',
             required: true,
             error:'',
@@ -109,9 +116,9 @@ export default new Vuex.Store({
             error:'',
             name: 'Oraș'
           },
-          attributions: {
+          description: {
             value: '',
-            required: true,
+            required: false,
             error:'',
             name: 'Descriere atribuții (optional)'
           }
@@ -144,8 +151,12 @@ export default new Vuex.Store({
     getField,
   },
   mutations: {
-    login(state, user) {
-      state.user = user;
+    doLogin(state, token) {
+
+      console.log(token)
+      state.user.token = token;
+
+      router.push('/create')
     },
     logout(state) {
       state.user.id = null;
@@ -157,7 +168,6 @@ export default new Vuex.Store({
     },
     switchWorkExperience(state, data) {
 
-      console.log(data.type)
       if (data.type === 'no-experience') {
         state.cv.workExperience = [{
           noExperience: {
@@ -172,14 +182,101 @@ export default new Vuex.Store({
       }
 
     },
+    addPersonalinfo() {
+
+    }
   },
   actions: {
+    doLogin(context, data) {
+
+      let postPayload = new FormData;
+      postPayload.set('username', data.username);
+      postPayload.set('password', data.password);
+      axios.post('https://dev-imable.herokuapp.com/auth/jwt/login',
+          postPayload,
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+      ).then(response => {
+
+        context.commit('doLogin', response.data.access_token)
+      })
+    },
+
+    doRegister(context, data) {
+
+      return new Promise((resolve, reject) => {
+        axios.post('https://dev-imable.herokuapp.com/auth/register', data).then(response => {
+          if (response) {
+
+            context.dispatch('doLogin', {username: response.data.email, password: data.password})
+            resolve(true)
+          }
+
+        }).catch(error =>  {
+          reject('something went wrong', error)
+        })
+      })
+
+    },
     addWorkExperienceAction(context) {
       context.commit('addWorkExperience');
     },
     switchWorkExperienceAction(context, data) {
-      console.log(data)
+
       context.commit('switchWorkExperience', {type: data.type});
+    },
+    savePersonalInfoAction(context) {
+
+      let data = {}
+      Object.keys(context.state.cv.personal).forEach(item => {
+        data[item] = context.state.cv.personal[item].value
+      })
+
+      axios.patch('https://dev-imable.herokuapp.com/users/me', {
+        data
+      }, {
+        headers: { Authorization: `Bearer ` +  context.state.user.token}
+      }).then(response => {
+        console.log(response)
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
+    saveWorkExperienceAction(context) {
+
+      context.state.cv.workExperience.forEach( experience => {
+
+        let data = {}
+
+        Object.keys(experience).forEach(item => {
+
+          // get start date / end date
+          if (item === 'period') {
+            data['start_date'] =  moment().format(experience[item].value[0], 'YYYY-MM-DD')
+            data['end_date'] =  moment().format(experience[item].value[1], 'YYYY-MM-DD')
+            console.log(data)
+          } else {
+            data[item] = experience[item].value
+          }
+        })
+
+        axios.post('https://dev-imable.herokuapp.com/user/experience', {
+          ...data
+        }, {
+          headers: { Authorization: `Bearer ` +  context.state.user.token}
+        }).then(response => {
+          console.log(response)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+
+
+
     }
   },
   modules: {

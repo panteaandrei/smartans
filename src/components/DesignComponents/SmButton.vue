@@ -1,10 +1,14 @@
 <template>
     <div class="d-flex button-wrapper align-items-center justify-content-start"
+         role="button"
+         aria-pressed="false"
+         tabindex="0"
          :class="{active: active, secondary:type === 'secondary', tertiary: type === 'tertiary'}"
          @click="handleClick"
          @mousedown="active = true"
          @mouseup="active = false"
          @mouseleave="active = false"
+         @keypress.enter="handleClick"
     >
         <i class="icon-before" :class="iconBefore" v-if="iconBefore"></i>
         <p>{{buttonText}}</p>

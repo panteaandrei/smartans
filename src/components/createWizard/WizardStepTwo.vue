@@ -1,16 +1,26 @@
 <template>
     <div class="d-flex flex-column align-items-start justify-content-center w-100 step-content mt-5">
         <div class="tabs d-flex align-items-center justify-content-start w-100">
-            <div class="tab" @click="switchTab('choose')" :class="{active: activeTab === 'choose'}">Alege experiența</div>
-            <div class="tab" @click="switchTab('no-experience')" :class="{active: activeTab === 'no-experience'}">Nu am experiență</div>
+            <div class="tab"
+                 @click="switchTab('choose')"
+                 :class="{active: activeTab === 'choose'}"
+                 role="tab"
+                 tabindex="0"
+            >Alege experiența</div>
+            <div class="tab"
+                 @click="switchTab('no-experience')"
+                 :class="{active: activeTab === 'no-experience'}"
+                 role="tab"
+                 tabindex="0"
+            >Nu am experiență</div>
         </div>
         <div class="add-experience col-12 col-md-9 d-flex flex-column" v-if="activeTab === 'choose'">
             <div class="experience-tab row mt-5" v-for="(experience, index) in workExperience" :key="index">
                 <div class="col-12 col-md-6" v-for="(field, index2) in Object.keys(experience)"
-                     :class="{'col-md-12':field === 'attributions'}"
+                     :class="{'col-md-12':field === 'description'}"
                      :key="index2">
                     <sm-text-input
-                        :type="field === 'attributions' ? 'textarea' : field === 'period'  ? 'date' : 'input'"
+                        :type="field === 'description' ? 'textarea' : field === 'period'  ? 'date' : 'input'"
                         :label="experience[field].name"
                         :name="'workExperience_'+index + '_' + field"
                         :error="workExperience[index][field].error"
@@ -36,6 +46,23 @@
 
             </sm-autofill-text>
         </div>
+        <div class="wizard-footer">
+            <div class="navigation-container d-flex align-items-center justify-content-center">
+                <sm-button
+                    :button-text="'inapoi'"
+                    :icon-before="'fas fa-arrow-left'"
+                    :type="'secondary'"
+                    @handleClick="previousStep"
+                    v-if="activeStep"
+                />
+                <sm-button
+                    class="ml-1"
+                    :button-text="!activeStep ? 'Start' :'Continuă'"
+                    :icon-after="'fas fa-arrow-right'"
+                    @handleClick="nextStep"
+                />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -49,6 +76,7 @@ import SmAutofillText from "@/components/DesignComponents/SmAutofillText";
 export default {
     name: "WizardStepTwo",
     components: {SmAutofillText, SmButton, SmTextInput},
+    props:['wizardSteps'],
     data() {
         return {
             activeTab: 'choose',
@@ -99,12 +127,77 @@ export default {
         },
         addExperience() {
             this.$store.dispatch('addWorkExperienceAction')
+        },
+        nextStep() {
+
+            if (this.activeStep === this.wizardSteps.length - 1) return;
+
+            // Check for validation rules
+            if (this.activeStep) {
+                let error = false;
+                let cvSection = this.cv[Object.keys(this.cv)[this.activeStep-1]];
+
+                if (Array.isArray(cvSection)) {
+                    cvSection.forEach(section => {
+                        let requiredFields = Object.keys(section).filter(field => {
+                            return section[field].required;
+                        });
+
+                        if (requiredFields.length) {
+                            requiredFields.forEach(field => {
+                                section[field].error = '';
+                                if (!section[field].value.length) {
+                                    section[field].error = 'This field is required';
+                                    error = true;
+                                }
+                            })
+
+                        }
+                    })
+                } else {
+                    let requiredFields = Object.keys(cvSection).filter(field => {
+                        return cvSection[field].required;
+                    });
+
+                    if (requiredFields.length) {
+                        requiredFields.forEach(field => {
+                            cvSection[field].error = '';
+                            if (!cvSection[field].value.length) {
+                                cvSection[field].error = 'This field is required';
+                                error = true;
+                            }
+                        })
+
+                    }
+                }
+
+                if (error) {
+                    return;
+                }else {
+
+                    // ajax call
+                    this.$store.dispatch('saveWorkExperienceAction')
+                }
+            }
+
+            this.wizardSteps[this.activeStep].active = false;
+            this.activeStep++;
+            this.wizardSteps[this.activeStep].active = true;
+        },
+        previousStep() {
+            if (!this.activeStep) return;
+
+            this.wizardSteps[this.activeStep].active = false;
+            this.activeStep--;
+            this.wizardSteps[this.activeStep].active = true;
         }
     },
     computed: {
         ...mapFields([
-            'cv.workExperience'
-        ]),
+            'cv',
+            'cv.workExperience',
+            'activeStep'
+        ])
     }
 }
 </script>
