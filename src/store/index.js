@@ -266,10 +266,20 @@ export default new Vuex.Store({
     },
     saveEducationAction(context, data) {
 
+      data.forEach(education => {
+        axios.post('https://dev-imable.herokuapp.com/user/education', {
+          ...education
+        }, {
+          headers: { Authorization: `Bearer ` +  context.state.user.token}
+        })
+      })
+    },
+    saveLanguageAction(context, data) {
+
 
       console.log(data)
       data.forEach(education => {
-        axios.post('https://dev-imable.herokuapp.com/user/education', {
+        axios.post('https://dev-imable.herokuapp.com/user/language', {
           ...education
         }, {
           headers: { Authorization: `Bearer ` +  context.state.user.token}

@@ -1,12 +1,27 @@
 <template>
     <div class="d-flex flex-column align-items-start justify-content-center w-100 step-content mt-5">
 
-        <div class="" v-for="(option, index) of options" :key="index">
+        <div class="row" v-for="(option, index) of options" :key="index">
             <sm-checkbox
                 :label="option.name"
                 :selected="option.value"
                 v-model="option.value"
             />
+
+            <div class="levels d-flex ">
+                <div class="level d-flex align-items-center justify-content-center" @click="selectLevel('LOW', index)">
+                    <p>Începător</p>
+                </div>
+                <div class="level d-flex align-items-center justify-content-center" @click="selectLevel('MEDIUM', index)">
+                    <p>Mediu</p>
+                </div>
+                <div class="level d-flex align-items-center justify-content-center" @click="selectLevel('ADVANCED', index)">
+                    <p>Avansat</p>
+                </div>
+                <div class="level d-flex align-items-center justify-content-center" @click="selectLevel('HIGH', index)">
+                    <p>Nativ</p>
+                </div>
+            </div>
 
 
         </div>
@@ -60,10 +75,16 @@ export default {
                     id: 0,
                     level:null
                 },
-            ]
+            ],
+            selectedLevel: ''
         }
+
     },
     methods: {
+        selectLevel(level, index) {
+            console.log(level)
+            this.options[index].level = level
+        },
         nextStep() {
 
             if (this.activeStep === this.wizardSteps.length - 1) return;
@@ -111,8 +132,11 @@ export default {
                     return;
                 }else {
 
+                    let data = this.options.filter(item => {
+                        return item.value
+                    })
                     // ajax call
-                    this.$store.dispatch('saveEducationAction', this.formattedData())
+                    this.$store.dispatch('saveLanguageAction', data)
                 }
             }
 
@@ -138,6 +162,35 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.levels {
+    height: 52px;
+    .level {
+        border: 1px solid #053AFA;
+        border-top: 2px solid #053AFA;
+        border-bottom: 2px solid #053AFA;
+        padding: 0 16px;
+        cursor: pointer;
+
+        &:first-child {
+            border-left:2px solid #053AFA;
+            border-radius: 8px 0 0 8px;
+        }
+        &:last-child {
+            border-right:2px solid #053AFA;
+            border-radius: 0 8px 8px 0;
+        }
+
+        p {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 140%;
+            text-align: center;
+            color: #424B6B;
+
+        }
+    }
+}
 
 </style>
