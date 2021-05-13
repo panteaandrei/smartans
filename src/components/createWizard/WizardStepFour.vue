@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column align-items-start justify-content-center w-100">
+    <div class="d-flex flex-column align-items-start justify-content-center w-100 step-content mt-5">
 
         <div class="" v-for="(option, index) of options" :key="index">
             <sm-checkbox
@@ -7,6 +7,8 @@
                 :selected="option.value"
                 v-model="option.value"
             />
+
+
         </div>
 
         <div class="wizard-footer">
