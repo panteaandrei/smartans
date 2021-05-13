@@ -1,11 +1,16 @@
 <template>
     <div class="d-flex flex-column align-items-start justify-content-center w-100 step-content mt-5">
-        <div class="options-selected col-12 col-md-9">
-
-        </div>
-        <div class="options d-flex align-items-start col-12 col-md-9">
+        <div class="options-selected d-flex align-items-start flex-wrap col-12 col-md-9">
             <sm-checkbox
-                v-for="(option, index) of options" :key="index"
+                v-for="(option, index) of selectedOptions" :key="index"
+                :label="option.name"
+                :selected="option.value"
+                v-model="option.value"
+            />
+        </div>
+        <div class="options d-flex align-items-start flex-wrap col-12 col-md-9">
+            <sm-checkbox
+                v-for="(option, index) of unselectedOptions" :key="index"
                 :label="option.name"
                 :selected="option.value"
                 v-model="option.value"
@@ -38,6 +43,7 @@ import SmButton from "@/components/DesignComponents/SmButton";
 import {mapFields} from "vuex-map-fields";
 export default {
     name: "WizardStepThree",
+    props: ['wizardSteps'],
     components: {SmButton, SmCheckbox},
     data() {
         return {
@@ -135,6 +141,12 @@ export default {
         }
     },
     computed: {
+        unselectedOptions() {
+            return this.options.filter(item => {return !item.value})
+        },
+        selectedOptions() {
+            return this.options.filter(item => {return item.value})
+        },
         ...mapFields([
             'cv',
             'activeStep'
